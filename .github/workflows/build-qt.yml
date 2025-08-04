@@ -1,4 +1,4 @@
-name: Qt builds
+name: Qt builds (with enhanced authentication and management features)
 
 on: push
 
@@ -24,8 +24,37 @@ jobs:
       - name: Write version file
         run: echo 'module version_string; enum versionStr = "Sideloader automated build, branch ${{ github.ref_name }}, commit ${{ github.sha }}";' > source/version_string.d
 
+      - name: Verify Qt frontend components
+        run: |
+          echo "Checking Qt frontend source files..."
+          ls -la frontends/qt/source/ui/
+          echo "Checking for new authentication components..."
+          test -f frontends/qt/source/ui/authentication/authenticationdialog.d && echo "✓ AuthenticationDialog found" || echo "✗ AuthenticationDialog missing"
+          test -f frontends/qt/source/ui/manageappidwindow.d && echo "✓ ManageAppIdWindow found" || echo "✗ ManageAppIdWindow missing"
+          test -f frontends/qt/source/ui/managecertificateswindow.d && echo "✓ ManageCertificatesWindow found" || echo "✗ ManageCertificatesWindow missing"
+          test -f frontends/qt/source/ui/sideloadprogresswindow.d && echo "✓ SideloadProgressWindow found" || echo "✗ SideloadProgressWindow missing"
+          test -f frontends/qt/source/ui/toolselectionwindow.d && echo "✓ ToolSelectionWindow found" || echo "✗ ToolSelectionWindow missing"
+          test -f frontends/qt/source/ui/qtthreadutils.d && echo "✓ QtThreadUtils found" || echo "✗ QtThreadUtils missing"
+          echo "Checking Qt frontend UI resources..."
+          ls -la frontends/qt/resources/
+          test -f frontends/qt/resources/authenticationdialog.ui && echo "✓ AuthenticationDialog UI found" || echo "✗ AuthenticationDialog UI missing"
+          test -f frontends/qt/resources/manageappidwindow.ui && echo "✓ ManageAppIdWindow UI found" || echo "✗ ManageAppIdWindow UI missing"
+          test -f frontends/qt/resources/managecertificateswindow.ui && echo "✓ ManageCertificatesWindow UI found" || echo "✗ ManageCertificatesWindow UI missing"
+          test -f frontends/qt/resources/sideloadprogresswindow.ui && echo "✓ SideloadProgressWindow UI found" || echo "✗ SideloadProgressWindow UI missing"
+          test -f frontends/qt/resources/toolselectionwindow.ui && echo "✓ ToolSelectionWindow UI found" || echo "✗ ToolSelectionWindow UI missing"
+
       - name: Build
         run: dub build -b release-debug --compiler=ldc2 :qt-frontend
+
+      - name: Verify build success
+        run: |
+          if [ -f "${{github.workspace}}/bin/sideloader" ]; then
+            echo "✓ Qt frontend build successful"
+            ls -la "${{github.workspace}}/bin/sideloader"
+          else
+            echo "✗ Qt frontend build failed - executable not found"
+            exit 1
+          fi
 
       - name: Rename
         run: mv "${{github.workspace}}/bin/sideloader" "${{github.workspace}}/bin/sideloader-qt-linux-x86_64"
@@ -121,6 +150,25 @@ jobs:
 
       - name: Write version file
         run: echo 'module version_string; enum versionStr = "Sideloader automated build, branch ${{ github.ref_name }}, commit ${{ github.sha }}";' > source/version_string.d
+
+      - name: Verify Qt frontend components
+        run: |
+          echo "Checking Qt frontend source files..."
+          ls -la frontends/qt/source/ui/
+          echo "Checking for new authentication components..."
+          test -f frontends/qt/source/ui/authentication/authenticationdialog.d && echo "✓ AuthenticationDialog found" || echo "✗ AuthenticationDialog missing"
+          test -f frontends/qt/source/ui/manageappidwindow.d && echo "✓ ManageAppIdWindow found" || echo "✗ ManageAppIdWindow missing"
+          test -f frontends/qt/source/ui/managecertificateswindow.d && echo "✓ ManageCertificatesWindow found" || echo "✗ ManageCertificatesWindow missing"
+          test -f frontends/qt/source/ui/sideloadprogresswindow.d && echo "✓ SideloadProgressWindow found" || echo "✗ SideloadProgressWindow missing"
+          test -f frontends/qt/source/ui/toolselectionwindow.d && echo "✓ ToolSelectionWindow found" || echo "✗ ToolSelectionWindow missing"
+          test -f frontends/qt/source/ui/qtthreadutils.d && echo "✓ QtThreadUtils found" || echo "✗ QtThreadUtils missing"
+          echo "Checking Qt frontend UI resources..."
+          ls -la frontends/qt/resources/
+          test -f frontends/qt/resources/authenticationdialog.ui && echo "✓ AuthenticationDialog UI found" || echo "✗ AuthenticationDialog UI missing"
+          test -f frontends/qt/resources/manageappidwindow.ui && echo "✓ ManageAppIdWindow UI found" || echo "✗ ManageAppIdWindow UI missing"
+          test -f frontends/qt/resources/managecertificateswindow.ui && echo "✓ ManageCertificatesWindow UI found" || echo "✗ ManageCertificatesWindow UI missing"
+          test -f frontends/qt/resources/sideloadprogresswindow.ui && echo "✓ SideloadProgressWindow UI found" || echo "✗ SideloadProgressWindow UI missing"
+          test -f frontends/qt/resources/toolselectionwindow.ui && echo "✓ ToolSelectionWindow UI found" || echo "✗ ToolSelectionWindow UI missing"
 
       - name: Build
         run: dub build -b release-debug --compiler=ldc2 --arch x86_64-apple-darwin :qt-frontend
@@ -224,6 +272,25 @@ jobs:
       - name: Write version file
         run: echo 'module version_string; enum versionStr = "Sideloader automated build, branch ${{ github.ref_name }}, commit ${{ github.sha }}";' > source/version_string.d
 
+      - name: Verify Qt frontend components
+        run: |
+          echo "Checking Qt frontend source files..."
+          ls -la frontends/qt/source/ui/
+          echo "Checking for new authentication components..."
+          test -f frontends/qt/source/ui/authentication/authenticationdialog.d && echo "✓ AuthenticationDialog found" || echo "✗ AuthenticationDialog missing"
+          test -f frontends/qt/source/ui/manageappidwindow.d && echo "✓ ManageAppIdWindow found" || echo "✗ ManageAppIdWindow missing"
+          test -f frontends/qt/source/ui/managecertificateswindow.d && echo "✓ ManageCertificatesWindow found" || echo "✗ ManageCertificatesWindow missing"
+          test -f frontends/qt/source/ui/sideloadprogresswindow.d && echo "✓ SideloadProgressWindow found" || echo "✗ SideloadProgressWindow missing"
+          test -f frontends/qt/source/ui/toolselectionwindow.d && echo "✓ ToolSelectionWindow found" || echo "✗ ToolSelectionWindow missing"
+          test -f frontends/qt/source/ui/qtthreadutils.d && echo "✓ QtThreadUtils found" || echo "✗ QtThreadUtils missing"
+          echo "Checking Qt frontend UI resources..."
+          ls -la frontends/qt/resources/
+          test -f frontends/qt/resources/authenticationdialog.ui && echo "✓ AuthenticationDialog UI found" || echo "✗ AuthenticationDialog UI missing"
+          test -f frontends/qt/resources/manageappidwindow.ui && echo "✓ ManageAppIdWindow UI found" || echo "✗ ManageAppIdWindow UI missing"
+          test -f frontends/qt/resources/managecertificateswindow.ui && echo "✓ ManageCertificatesWindow UI found" || echo "✗ ManageCertificatesWindow UI missing"
+          test -f frontends/qt/resources/sideloadprogresswindow.ui && echo "✓ SideloadProgressWindow UI found" || echo "✗ SideloadProgressWindow UI missing"
+          test -f frontends/qt/resources/toolselectionwindow.ui && echo "✓ ToolSelectionWindow UI found" || echo "✗ ToolSelectionWindow UI missing"
+
       - name: Build
         run: dub build -b release-debug --compiler=ldc2 --arch arm64-apple-macos :qt-frontend
 
@@ -275,11 +342,40 @@ jobs:
       - name: Write version file
         run: echo 'module version_string; enum versionStr = "Sideloader automated build, branch ${{ github.ref_name }}, commit ${{ github.sha }}";' > source/version_string.d
 
+      - name: Verify Qt frontend components
+        run: |
+          echo "Checking Qt frontend source files..."
+          Get-ChildItem frontends/qt/source/ui/
+          echo "Checking for new authentication components..."
+          if (Test-Path frontends/qt/source/ui/authentication/authenticationdialog.d) { echo "✓ AuthenticationDialog found" } else { echo "✗ AuthenticationDialog missing" }
+          if (Test-Path frontends/qt/source/ui/manageappidwindow.d) { echo "✓ ManageAppIdWindow found" } else { echo "✗ ManageAppIdWindow missing" }
+          if (Test-Path frontends/qt/source/ui/managecertificateswindow.d) { echo "✓ ManageCertificatesWindow found" } else { echo "✗ ManageCertificatesWindow missing" }
+          if (Test-Path frontends/qt/source/ui/sideloadprogresswindow.d) { echo "✓ SideloadProgressWindow found" } else { echo "✗ SideloadProgressWindow missing" }
+          if (Test-Path frontends/qt/source/ui/toolselectionwindow.d) { echo "✓ ToolSelectionWindow found" } else { echo "✗ ToolSelectionWindow missing" }
+          if (Test-Path frontends/qt/source/ui/qtthreadutils.d) { echo "✓ QtThreadUtils found" } else { echo "✗ QtThreadUtils missing" }
+          echo "Checking Qt frontend UI resources..."
+          Get-ChildItem frontends/qt/resources/
+          if (Test-Path frontends/qt/resources/authenticationdialog.ui) { echo "✓ AuthenticationDialog UI found" } else { echo "✗ AuthenticationDialog UI missing" }
+          if (Test-Path frontends/qt/resources/manageappidwindow.ui) { echo "✓ ManageAppIdWindow UI found" } else { echo "✗ ManageAppIdWindow UI missing" }
+          if (Test-Path frontends/qt/resources/managecertificateswindow.ui) { echo "✓ ManageCertificatesWindow UI found" } else { echo "✗ ManageCertificatesWindow UI missing" }
+          if (Test-Path frontends/qt/resources/sideloadprogresswindow.ui) { echo "✓ SideloadProgressWindow UI found" } else { echo "✗ SideloadProgressWindow UI missing" }
+          if (Test-Path frontends/qt/resources/toolselectionwindow.ui) { echo "✓ ToolSelectionWindow UI found" } else { echo "✗ ToolSelectionWindow UI missing" }
+
       - name: Build
         run: |
           $env:LIB += ';' + $env:Qt5_Dir + '\lib'
           echo $env:LIB
           dub build -b release-debug --compiler=ldc2 :qt-frontend
+
+      - name: Verify build success
+        run: |
+          if (Test-Path "${{github.workspace}}/bin/sideloader.exe") {
+            echo "✓ Qt frontend build successful"
+            Get-ChildItem "${{github.workspace}}/bin/sideloader.exe"
+          } else {
+            echo "✗ Qt frontend build failed - executable not found"
+            exit 1
+          }
 
       - name: Rename
         run: |

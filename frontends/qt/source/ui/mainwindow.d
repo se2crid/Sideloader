@@ -40,11 +40,17 @@ import qt.widgets.widget;
 import imobiledevice;
 
 import constants;
+import provision;
 import sideload;
 import tools;
 import utils;
 
 import ui.utils;
+import ui.authentication.authenticationdialog;
+import ui.manageappidwindow;
+import ui.managecertificateswindow;
+import ui.sideloadprogresswindow;
+import ui.toolselectionwindow;
 
 alias MainWindowUI = UIStruct!"mainwindow.ui";
 
@@ -52,6 +58,9 @@ class MainWindow: QMainWindow {
     mixin(Q_OBJECT_D);
 
     MainWindowUI* ui;
+    string configurationPath;
+    Device device;
+    ADI adi;
 
     iDevice selectedDevice;
     LockdowndClient lockdowndClient;
@@ -59,6 +68,9 @@ class MainWindow: QMainWindow {
     Application selectedApplication;
 
     this(string configurationPath, Device device, ADI adi) {
+        this.configurationPath = configurationPath;
+        this.device = device;
+        this.adi = adi;
         ui = cpp_new!MainWindowUI();
         ui.setupUi(this);
 
@@ -68,6 +80,8 @@ class MainWindow: QMainWindow {
         QObject.connect(ui.deviceComboBox.signal!"currentIndexChanged", this.slot!"refreshView");
         QObject.connect(ui.actionRefresh_device_list.signal!"triggered", this.slot!"refreshDevices");
         QObject.connect(ui.actionDonate.signal!"triggered", delegate() => browse("https://github.com/sponsors/Dadoum"));
+        QObject.connect(ui.actionManage_App_IDs.signal!"triggered", this.slot!"showManageAppIds");
+        QObject.connect(ui.actionManage_certificates.signal!"triggered", this.slot!"showManageCertificates");
         QObject.connect(ui.ipaLine.signal!"editingFinished", this.slot!"checkApplication");
         QObject.connect(
             ui.actionAbout.signal!"triggered",
@@ -99,6 +113,7 @@ class MainWindow: QMainWindow {
             delegate() {
                 log.info("Installing...");
                 this.sideloadProcedureTriggered(false);
+                performSideload();
             }
         );
 
@@ -322,5 +337,37 @@ class MainWindow: QMainWindow {
         } else {
             ui.sideloadTab.setCursor(*cpp_new!QCursor(CursorShape.WaitCursor));
         }
+    }
+
+    @QSlot
+    void showManageAppIds() {
+        AuthenticationDialog.authenticate(this, device, adi, (session) {
+            auto window = new ManageAppIdWindow(this, session);
+            window.show();
+        });
+    }
+
+    @QSlot
+    void showManageCertificates() {
+        AuthenticationDialog.authenticate(this, device, adi, (session) {
+            auto window = new ManageCertificatesWindow(this, session);
+            window.show();
+        });
+    }
+
+    void performSideload() {
+        if (!selectedApplication || !selectedDevice) {
+            return;
+        }
+
+        AuthenticationDialog.authenticate(this, device, adi, (session) {
+            SideloadProgressWindow.performSideload(
+                this,
+                configurationPath,
+                session,
+                selectedApplication,
+                selectedDevice
+            );
+        });
     }
 }
