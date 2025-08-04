@@ -15,13 +15,19 @@ runs-on: windows-2019
 runs-on: windows-latest  # Uses Windows Server 2022
 ```
 
-#### **2. Updated MSVC Toolset**
+#### **2. Updated MSVC Setup**
 ```yaml
 # Before:
-toolset: 14.0  # Visual Studio 2015
+uses: TheMrMilchmann/setup-msvc-dev@v3
+with:
+  toolset: 14.0
+  arch: x64
 
 # After:
-toolset: 14.3  # Visual Studio 2022
+uses: microsoft/setup-msbuild@v2
+uses: ilammy/msvc-dev-cmd@v1
+with:
+  arch: x64
 ```
 
 #### **3. Updated Qt Installation**
@@ -29,10 +35,12 @@ toolset: 14.3  # Visual Studio 2022
 # Before:
 uses: jurplel/install-qt-action@v3
 arch: 'win64_msvc2015_64'
+archives: 'qtbase'
 
 # After:
 uses: jurplel/install-qt-action@v4
-arch: 'win64_msvc2019_64'  # Compatible with VS 2022
+arch: 'win64_msvc2019_64'  # Compatible with default MSVC
+archives: 'qtbase qttools'  # Added qttools for better compatibility
 ```
 
 #### **4. Updated D Compiler**
@@ -57,9 +65,11 @@ uses: actions/checkout@v4
 
 1. **✅ Eliminates Deprecation Warnings**: No more Windows Server 2019 warnings
 2. **✅ Uses Current Infrastructure**: Windows Server 2022 with latest tools
-3. **✅ Better Compatibility**: MSVC 2019/2022 toolchain for modern builds
-4. **✅ Improved Stability**: Latest action versions with bug fixes
-5. **✅ Future-Proof**: Uses `windows-latest` which auto-updates
+3. **✅ Better MSVC Setup**: Uses standard Microsoft actions for reliable toolchain setup
+4. **✅ Fixes Toolset Issues**: Uses default MSVC instead of specific version numbers
+5. **✅ Improved Stability**: Latest action versions with bug fixes
+6. **✅ Future-Proof**: Uses `windows-latest` which auto-updates
+7. **✅ Better Debugging**: Added MSVC verification steps for troubleshooting
 
 ### **🚀 Build Status:**
 

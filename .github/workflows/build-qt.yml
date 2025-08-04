@@ -319,10 +319,20 @@ jobs:
         with:
           submodules: recursive
 
-      - uses: TheMrMilchmann/setup-msvc-dev@v3
+      - uses: microsoft/setup-msbuild@v2
+
+      - uses: ilammy/msvc-dev-cmd@v1
         with:
-          toolset: 14.3
           arch: x64
+
+      - name: Verify MSVC setup
+        run: |
+          echo "Checking MSVC environment..."
+          where cl
+          cl
+          echo "Checking environment variables..."
+          echo "LIB: $env:LIB"
+          echo "INCLUDE: $env:INCLUDE"
 
       - uses: dlang-community/setup-dlang@v1
         with:
@@ -337,7 +347,7 @@ jobs:
           target: 'desktop'
           dir: '${{github.workspace}}/qt/'
           arch: 'win64_msvc2019_64'
-          archives: 'qtbase'
+          archives: 'qtbase qttools'
 
       - name: Write version file
         run: echo 'module version_string; enum versionStr = "Sideloader automated build, branch ${{ github.ref_name }}, commit ${{ github.sha }}";' > source/version_string.d
