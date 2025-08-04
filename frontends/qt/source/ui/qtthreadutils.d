@@ -5,6 +5,7 @@ import core.stdcpp.new_: cpp_new;
 import qt.core.coreapplication;
 import qt.core.object;
 import qt.core.thread;
+import qt.core.timer;
 import qt.helpers;
 
 /**
@@ -21,56 +22,18 @@ void runInUIThread(void delegate() action) {
         // Already in UI thread, execute immediately
         action();
     } else {
-        // Schedule execution in UI thread using Qt's event system
-        auto invoker = new UIThreadInvoker(action);
-        QMetaObject.invokeMethod(
-            invoker,
-            "execute",
-            Qt.ConnectionType.QueuedConnection
-        );
+        // Use timer-based approach for thread-safe execution
+        runInUIThreadTimer(action);
     }
 }
 
-/**
- * Helper class for executing delegates in the UI thread
- * Uses Qt's meta-object system for thread-safe execution
- */
-private class UIThreadInvoker : QObject {
-    mixin(Q_OBJECT_D);
-    
-    private void delegate() action;
-    
-    this(void delegate() action) {
-        this.action = action;
-        // Move to main thread to ensure proper execution
-        moveToThread(QCoreApplication.instance().thread());
-    }
-    
-    @QSlot
-    void execute() {
-        if (action) {
-            try {
-                action();
-            } catch (Exception ex) {
-                // Log error but don't crash the UI thread
-                import slf4d;
-                auto log = getLogger();
-                log.errorF!"Error in UI thread execution: %s"(ex.msg);
-            }
-        }
-        
-        // Clean up - this object is no longer needed
-        deleteLater();
-    }
-}
+// UIThreadInvoker class removed - using timer-based approach instead
 
 /**
- * Alternative implementation using QTimer for simpler cases
- * This can be used when QMetaObject.invokeMethod is not available
+ * Timer-based implementation for UI thread execution
+ * This is a reliable approach that works with most Qt bindings
  */
 void runInUIThreadTimer(void delegate() action) {
-    import qt.core.timer;
-    
     if (QThread.currentThread() == QCoreApplication.instance().thread()) {
         // Already in UI thread, execute immediately
         action();
@@ -78,7 +41,7 @@ void runInUIThreadTimer(void delegate() action) {
         // Use single-shot timer to execute in UI thread
         auto timer = new QTimer();
         timer.setSingleShot(true);
-        timer.timeout.connect(() {
+        timer.timeout.connect(delegate() {
             try {
                 action();
             } catch (Exception ex) {

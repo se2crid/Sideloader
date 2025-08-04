@@ -31,8 +31,16 @@ QObject.connect(deleteButton.signal!"clicked", delegate() {
 - Added proper variable capture for AppId parameter
 
 #### **2. ManageCertificatesWindow (`frontends/qt/source/ui/managecertificateswindow.d`)**
-- Fixed revoke button signal connection  
+- Fixed revoke button signal connection
 - Added proper variable capture for Certificate parameter
+
+#### **3. AuthenticationDialog (`frontends/qt/source/ui/authentication/authenticationdialog.d`)**
+- Added missing `qt.widgets.widget` import for QWidget type
+
+#### **4. QtThreadUtils (`frontends/qt/source/ui/qtthreadutils.d`)**
+- Simplified thread dispatch implementation
+- Removed dependency on QMetaObject (not available in dqt)
+- Uses timer-based approach for reliable UI thread execution
 
 ### **🎯 What This Fixes:**
 
@@ -40,6 +48,8 @@ QObject.connect(deleteButton.signal!"clicked", delegate() {
 2. **✅ Signal Connections**: Proper Qt signal/slot connections in D
 3. **✅ Variable Capture**: Correct closure handling for button callbacks
 4. **✅ Memory Safety**: Proper variable lifetime management
+5. **✅ Missing Imports**: Added all required Qt widget imports
+6. **✅ Thread Safety**: Simplified, reliable UI thread dispatch mechanism
 
 ### **📋 Technical Details:**
 

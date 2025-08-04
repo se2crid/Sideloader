@@ -20,6 +20,7 @@ import qt.widgets.lineedit;
 import qt.widgets.pushbutton;
 import qt.widgets.stackedwidget;
 import qt.widgets.ui;
+import qt.widgets.widget;
 import qt.widgets.boxlayout;
 
 import provision;
