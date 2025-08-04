@@ -10,13 +10,13 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
 
       - uses: dlang-community/setup-dlang@v1
         with:
-          compiler: ldc-1.33.0
+          compiler: ldc-1.35.0
 
       - name: Install dependencies
         run: sudo apt-get update && sudo apt-get install -y libz-dev elfutils qtbase5-dev
@@ -74,7 +74,7 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
 
@@ -83,7 +83,7 @@ jobs:
         uses: Homebrew/actions/setup-homebrew@master
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v3
+        uses: jurplel/install-qt-action@v4
         with:
           aqtversion: '==3.1.*'
           version: '5.15.2'
@@ -94,7 +94,7 @@ jobs:
 
       - uses: dlang-community/setup-dlang@v1
         with:
-          compiler: ldc-1.33.0
+          compiler: ldc-1.35.0
 
       - name: Set-up macOS cross-compilation
         run: |
@@ -195,20 +195,20 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
 
       - uses: dlang-community/setup-dlang@v1
         with:
-          compiler: ldc-1.33.0
+          compiler: ldc-1.35.0
 
       - name: Set up Homebrew
         id: set-up-homebrew
         uses: Homebrew/actions/setup-homebrew@master
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v3
+        uses: jurplel/install-qt-action@v4
         with:
           aqtversion: '==3.1.*'
           version: '5.15.2'
@@ -312,31 +312,31 @@ jobs:
             ${{github.workspace}}/Sideloader-qt.app.tgz
 
   build-windows-x86_64:
-    runs-on: windows-2019
+    runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
 
       - uses: TheMrMilchmann/setup-msvc-dev@v3
         with:
-          toolset: 14.0
+          toolset: 14.3
           arch: x64
 
       - uses: dlang-community/setup-dlang@v1
         with:
-          compiler: ldc-1.33.0
+          compiler: ldc-1.35.0
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v3
+        uses: jurplel/install-qt-action@v4
         with:
           aqtversion: '==3.1.*'
           version: '5.15.2'
           host: 'windows'
           target: 'desktop'
           dir: '${{github.workspace}}/qt/'
-          arch: 'win64_msvc2015_64'
+          arch: 'win64_msvc2019_64'
           archives: 'qtbase'
 
       - name: Write version file
