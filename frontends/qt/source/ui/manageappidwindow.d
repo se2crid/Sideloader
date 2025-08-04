@@ -131,8 +131,10 @@ private:
         buttonLayout.addWidget(manageFeaturesButton);
         
         auto deleteButton = cpp_new!QPushButton(QString("Delete"));
-        QObject.connect(deleteButton.signal!"clicked", [this, appId]() {
-            deleteAppId(appId);
+        // Capture appId in a closure
+        auto capturedAppId = appId;
+        QObject.connect(deleteButton.signal!"clicked", delegate() {
+            deleteAppId(capturedAppId);
         });
         buttonLayout.addWidget(deleteButton);
         

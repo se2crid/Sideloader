@@ -130,8 +130,10 @@ private:
         
         auto revokeButton = cpp_new!QPushButton(QString("Revoke"));
         revokeButton.setStyleSheet(*cpp_new!QString("QPushButton { background-color: #e74c3c; color: white; }"));
-        QObject.connect(revokeButton.signal!"clicked", [this, certificate]() {
-            revokeCertificate(certificate);
+        // Capture certificate in a closure
+        auto capturedCertificate = certificate;
+        QObject.connect(revokeButton.signal!"clicked", delegate() {
+            revokeCertificate(capturedCertificate);
         });
         buttonLayout.addWidget(revokeButton);
         
