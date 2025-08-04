@@ -45,7 +45,7 @@ class ManageCertificatesWindow: QDialog {
         ui = cpp_new!ManageCertificatesWindowUI();
         ui.setupUi(this);
         
-        setWindowTitle("Manage Certificates");
+        setWindowTitle(*cpp_new!QString("Manage Certificates"));
         setModal(true);
         resize(600, 400);
         

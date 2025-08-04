@@ -4,6 +4,7 @@ import core.stdcpp.new_: cpp_new;
 import core.thread;
 
 import std.concurrency;
+import std.conv;
 import std.format;
 import std.sumtype;
 
@@ -63,14 +64,14 @@ class AuthenticationDialog: QDialog {
         ui.stackedWidget.setCurrentIndex(0);
         ui.backButton.setVisible(false);
         
-        setWindowTitle("Apple Account Authentication");
+        setWindowTitle(*cpp_new!QString("Apple Account Authentication"));
         setModal(true);
     }
     
     @QSlot
     void performLogin() {
-        string appleId = ui.appleIdEdit.text().toConstWString().to!string();
-        string password = ui.passwordEdit.text().toConstWString().to!string();
+        string appleId = ui.appleIdEdit.text().toConstWString().to!string;
+        string password = ui.passwordEdit.text().toConstWString().to!string;
         
         if (appleId.length == 0 || password.length == 0) {
             setErrorMessage("Please enter both Apple ID and password.");
@@ -128,7 +129,7 @@ class AuthenticationDialog: QDialog {
     
     @QSlot
     void submit2FA() {
-        string code = ui.codeEdit.text().toConstWString().to!string();
+        string code = ui.codeEdit.text().toConstWString().to!string;
         
         if (code.length == 0) {
             set2FAErrorMessage("Please enter the verification code.");

@@ -41,7 +41,7 @@ void runInUIThreadTimer(void delegate() action) {
         // Use single-shot timer to execute in UI thread
         auto timer = new QTimer();
         timer.setSingleShot(true);
-        timer.timeout.connect(delegate() {
+        QObject.connect(timer.signal!"timeout", delegate() {
             try {
                 action();
             } catch (Exception ex) {

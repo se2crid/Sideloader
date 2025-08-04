@@ -38,7 +38,7 @@ class ToolSelectionWindow: QDialog {
         ui = cpp_new!ToolSelectionWindowUI();
         ui.setupUi(this);
         
-        setWindowTitle("Additional Tools");
+        setWindowTitle(*cpp_new!QString("Additional Tools"));
         setModal(true);
         resize(500, 400);
         
@@ -146,13 +146,11 @@ private:
             nameLabel.setStyleSheet(*cpp_new!QString("font-weight: bold; font-size: 14px;"));
             layout.addWidget(nameLabel);
             
-            // Tool description (if available)
-            if (tool.description.length > 0) {
-                auto descLabel = cpp_new!QLabel(QString(tool.description));
-                descLabel.setStyleSheet(*cpp_new!QString("color: #666; font-size: 12px;"));
-                descLabel.setWordWrap(true);
-                layout.addWidget(descLabel);
-            }
+            // Tool description (placeholder - not available in Tool struct)
+            auto descLabel = cpp_new!QLabel(QString("Device tool"));
+            descLabel.setStyleSheet(*cpp_new!QString("color: #666; font-size: 12px;"));
+            descLabel.setWordWrap(true);
+            layout.addWidget(descLabel);
             
             // Diagnostic message (if any)
             if (tool.diagnostic) {

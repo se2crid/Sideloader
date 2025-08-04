@@ -47,7 +47,7 @@ class ManageAppIdWindow: QDialog {
         ui = cpp_new!ManageAppIdWindowUI();
         ui.setupUi(this);
         
-        setWindowTitle("Manage App IDs");
+        setWindowTitle(*cpp_new!QString("Manage App IDs"));
         setModal(true);
         resize(600, 400);
         
